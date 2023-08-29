@@ -6,9 +6,9 @@ from src.local_worker import LocalWorker
 
 
 class Synchronizer:
-    def __init__(self):
-        self.drive_worker = DriveWorker()
-        self.local_worker = LocalWorker()
+    def __init__(self, google_drive_folder_name, local_folder_path):
+        self.drive_worker = DriveWorker(google_drive_folder_name)
+        self.local_worker = LocalWorker(local_folder_path)
 
     def generate_mod_lists(self, drive_files: Dict, files: Dict):
         drive_set = set(drive_files.keys())

@@ -14,7 +14,6 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 
 SCOPES = ['https://www.googleapis.com/auth/drive',"https://www.googleapis.com/auth/drive.metadata"]
-GOOGLE_DRIVE_SYNCHRONIZATION_FOLDER = "KeePassFolder"
 
 def get_date_object(date_string):
   return iso8601.parse_date(date_string)
@@ -23,7 +22,8 @@ def get_date_string(date_object):
   return rfc3339.rfc3339(date_object)
 
 class DriveWorker:
-    def __init__(self):
+    def __init__(self, folder):
+        self.google_drive_folder_name = folder
         self.creds = DriveWorker.get_credentials()
         self.service = build('drive', 'v3', credentials=self.creds)
 
@@ -50,7 +50,7 @@ class DriveWorker:
 
     def query_folder(self):
         folderId = self.service.files().list(
-            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{GOOGLE_DRIVE_SYNCHRONIZATION_FOLDER}'",
+            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{self.google_drive_folder_name}'",
             pageSize=10, fields="nextPageToken, files(id, name)").execute()
         # this gives us a list of all folders with that name
         folderIdResult = folderId.get('files', [])

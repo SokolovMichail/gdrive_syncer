@@ -10,8 +10,8 @@ LOCAL_FOLDER = "experiment_folder" # Absolute path to Folder
 
 class LocalWorker:
 
-    def __init__(self):
-        self.folder = Path(LOCAL_FOLDER)
+    def __init__(self, local_folder):
+        self.folder = Path(local_folder)
     def query_local_files(self):
         pathes = list(self.folder.glob("*"))
 
